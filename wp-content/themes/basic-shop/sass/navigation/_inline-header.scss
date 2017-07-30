@@ -1,0 +1,127 @@
+//inline header
+.site-header {
+    .header-content.inline {
+        //DESKTOP
+        @include media(769px) {
+            //header navigation
+            .header-nav {
+                margin:0 -99em;
+                padding:0 99em;
+                clear: both;
+                ul {
+                    list-style: none;
+                    text-align: right;
+                    margin: 0 $base__spacing;
+                    li {
+                        *display: inline;
+                        display: inline-block;
+                        a {
+                            display: block;
+                            @include padding($small__spacing 0 $small__spacing $small__spacing);
+                        }
+                    }
+                }
+                //description
+                .site-description {
+                    display: block;
+                    @include padding($small__spacing $small__spacing $small__spacing 0);
+                    float: left;
+                }
+            }
+            //site title and logo
+            .custom-logo-link,
+            .site-title {
+                @include span-columns(6);
+                @include padding($base__spacing null $base__spacing $base__spacing );
+            }
+            //main nav
+            .main-navigation {
+                @include span-columns(6);
+                @include omega();
+                @include padding(0);
+                //first
+                ul {
+                    text-align: right;
+                    li:hover > ul,
+                    li.focus > ul {
+                        left: auto;
+                        right: 0;
+                    }
+                    a {
+                        padding-top: 40px;
+                        padding-bottom: 40px;
+                    }
+                    //second level
+                    ul {
+                        float: right;
+                        position: absolute;
+                        top: 100%;
+                        right: -999em;
+                        z-index: 99999;
+                        &:after {
+                            content: none;
+                        }
+                        li {
+                            border:none;
+                            &:hover > ul,
+                            &.focus > ul {
+                                right: 100%;
+                                width: 100%;
+                                top:0;
+                            }
+                            a {
+                                padding-top: $small__spacing;
+                                padding-bottom: $small__spacing;
+                            }
+                        }
+                        //children
+                        .menu-item-has-children > a:after {
+                            font-family: 'simple-line-icons';
+                            content: "\e605";
+                            position: relative;
+                            float: left;
+                            @include opacity(.5);
+                        }
+                    }
+                }
+            }
+        }
+        //MOBILE
+        @include media(max-width 768px) {
+            .custom-logo-link,
+            .site-title {
+                @include span-columns(10);
+                @include padding($base__spacing);
+            }
+            .header-nav {
+                @include span-columns(12);
+                @include padding(0 $base__spacing );
+                ul {
+                    list-style: none;
+                    margin: 0;
+                    li {
+                        *display: inline;
+                        display: inline-block;
+                        a {
+                            display: block;
+                            @include padding($small__spacing $small__spacing $small__spacing 0);
+                        }
+                    }
+                }
+                //description
+                .site-description {
+                    @include padding($small__spacing $small__spacing $small__spacing 0);
+                }
+            }
+             .slicknav_btn,
+             .menu-toggle {
+                float: right;
+                @include margin(-80px 0 0 0);
+                @include padding($small__spacing);
+                &:hover {
+                }
+            }
+        }
+    //END
+    }
+}
