@@ -5,7 +5,6 @@
     echo '<div>'.$object->email.'</div>';
     echo '<div>'.$object->ntrp_rating.'</div>';
 ?>
-
 <p>
     <?php echo $this->html->link('&#8592; All Rosters', array('controller' => 'rosters')); ?>
 </p>
