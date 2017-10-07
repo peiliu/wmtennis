@@ -8,6 +8,8 @@ Version:
 Author URI: 
 */
 
+define( 'WMTENNIS_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+
 register_activation_hook(__FILE__, 'wmtennis_activate');
 register_deactivation_hook(__FILE__, 'wmtennis_deactivate');
 
