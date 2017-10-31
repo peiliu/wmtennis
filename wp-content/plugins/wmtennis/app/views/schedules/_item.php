@@ -1,26 +1,28 @@
-<td width="15"> 
+<?php //<td width="15"> ?> 
 <?php
+/*
 if (isset($object->confirmed))
 {
-    if ($object->confirmed) 
+    if ($object->confirmed == 1) 
     { 
-       echo '<span class="dashicons dashicons-yes"></span>';
+       echo '<span class="dashicons dashicons-yes" style="color:green"></span>';
     }
-    else if (!$object->confirmed)
+    else if ($object->confirmed == -1)
     {
-        echo '<span class="dashicons dashicons-no"></span>';
+        echo '<span class="dashicons dashicons-no" style="color:red"></span>';
     }
     else 
     {
-        echo '<span class="dashicons dashicons-warning"></span>';
+        echo '<span class="dashicons dashicons-editor-help" style="color:black"></span>';
     }
 }
 else 
 {
-    echo '<span class="dashicons dashicons-warning"></span>';
+    echo '<span class="dashicons dashicons-editor-help" style="color:black;font-size:24px;"></span>';
 }
+*/
 ?>
-</td>
+<?php //</td> ?>
 <td> <?php echo $object->date; ?> </td>
 <td> <?php echo $object->home_team->name; ?> </td>
 <td> <?php echo $object->visit_team->name; ?> </td> 

@@ -17,6 +17,8 @@ class WmtennisLoader extends MvcPluginLoader {
             'teams' => $wpdb->prefix.'teams'
         );
         
+        $this->wmtennis_add_roles_and_capabilities();
+        
     }
         
     function activate() {
@@ -200,6 +202,16 @@ class WmtennisLoader extends MvcPluginLoader {
         
     }
 
+    function wmtennis_add_roles_and_capabilities() {
+        // add roles only when not exist
+        $baseRole = get_role('wm_roster');
+        if (isset($baseRole)) {
+            $baseRole->add_cap('view_schedule');
+            $baseRole->add_cap('view_lineup');
+            $baseRole->add_cap('confirm_match');
+        }
+    }
+    
 }
 
 ?>

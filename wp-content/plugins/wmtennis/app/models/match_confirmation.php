@@ -52,6 +52,47 @@ class MatchConfirmation extends MvcModel {
         $object->position = $this->PositionEnumToString($object->position);
         
     }
+    
+    public function confirm_match($schedule_id, $player_id, $conf_val) {
+        $options = array(
+            'conditions' => array(
+            'schedule_id' => $schedule_id,
+            'player_id' => $player_id
+                )
+    
+        );
+        
+        $matches = $this->find($options);
+        
+        if (count($matches) == 1) { 
+            $match = $matches[0];
+            $data = array(
+                'player_confirmed' => $conf_val
+            );
+        }
+        else {
+            $options = array(
+                'conditions' => array (
+                'schedule_id' => $schedule_id,
+                'player2_id' => $player_id
+                    )
+            );
+            
+           
+            $matches = $this->find($options);
+            if(count($matches) == 1) {
+                $match = $matches[0];
+                $data = array(
+                    'player2_confirmed' => $conf_val
+                );
+            }
+        }
+        
+        if (isset($match)) {           
+            $this->update_all($data, $options);
+        }
+    }
+    
 }
 
 ?>

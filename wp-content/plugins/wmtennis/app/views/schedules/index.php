@@ -4,7 +4,7 @@
 <table class="tablepress">
  <thead>
   <tr>
-    <th class="column-1" width=100px>Available</th> 
+ <?php //   <th class="column-1" width=100px>Available</th> ?> 
     <th class="column-2">Date</th>
     <th class="column-3">Home Team</th>
     <th class="column-4">Visit Team</th>

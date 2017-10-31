@@ -11,7 +11,7 @@ Match Address: <?php echo $object->home_team->address1 . ', '. $object->home_tea
 		<th class="column-2"> Time </th> 
 		<th class="column-3"> Player </th> 
 		<th class="column-4"> Player </th>
-		<th class="column-5">  </th>
+		<?php // <th class="column-5">  </th> ?>
 	</tr> 
 </thead>
 <tbody>
@@ -22,6 +22,7 @@ Match Address: <?php echo $object->home_team->address1 . ', '. $object->home_tea
 <?php endforeach; ?>
 
 
+<?php if (current_user_can('edit_lineup')){?>
 <tr>
 	<td> 
 	<input type="hidden" name="data[MatchConfirmation][schedule_id]" value=<?php echo $object->id; ?>>
@@ -66,13 +67,25 @@ Match Address: <?php echo $object->home_team->address1 . ', '. $object->home_tea
 	</td>
 	<td> <input type="submit" value="Add lineup"> </td>
 </tr>
+<?php } ?>
 </tbody>
 </table>
+<?php //if (current_user_can('confirm_match')) { ?>
+   
+  Confirmation: <input type="radio" name="rb_confirmation" value="1"> Confirmed 
+  <input type="radio" name="rb_confirmation" value="-1"> Unavailable
+  <input type="submit" value="Submit"> 
+
 </form>
+
+
 
 <?php
 if ($_SERVER['REQUEST_METHOD']=='POST')
 {
+    if (isset($_POST['rb_confirmation'])) {
+        $this->confirm_match($object->match_id, get_current_user_id(), $_POST['rb_confirmation']);
+    }
     $this->add_lineup();
 }
 ?>

@@ -15,6 +15,10 @@ spl_autoload_register(function ($class_name) {
 });
 
 
+//    add_action( 'wp_ajax_my_action', array($this, 'my_action') );
+//    add_action( 'wp_ajax_nopriv_my_action', array($this, 'my_action') );
+
+   
 class SchedulesController extends MvcPublicController {
     var $tableHelper;
         
@@ -25,6 +29,9 @@ class SchedulesController extends MvcPublicController {
         //add_action( 'wp_print_footer_scripts', array( $this, 'add_datatable_calls2' ), 11 ); // after inclusion of files
         $this->tableHelper->enqueue_datatables();
         $this->set_rosters();
+        add_action( 'wp_ajax_my_action', array($this, 'my_action') );
+        add_action( 'wp_ajax_nopriv_my_action', array($this, 'my_action') );
+        $this->enqueue_scripts();
     }
     
     protected function set_rosters() {
@@ -42,6 +49,12 @@ class SchedulesController extends MvcPublicController {
         }
         //$this->get_post_param_data();
         $this->set_object();
+    }
+    
+    public function confirm_match($schedule_id, $player_id, $conf_val) {
+        $this->load_model('MatchConfirmation');
+        $this->MatchConfirmation->confirm_match($schedule_id, $player_id, $conf_val);
+        $this->refresh();
     }
     
     public function add_lineup()
@@ -498,6 +511,26 @@ DOCREADY;
              }
          
 CFL;
+    }
+      
+    function enqueue_scripts() {
+        wp_enqueue_style('dashicons');
+        // wp_enqueue_script( 'ajax-script', WMTENNIS_PLUGIN_URL . 'js/wmtennis_schedules.js', array('jquery'));
+        // in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
+        wp_localize_script( 'ajax-script', 'ajax_object',
+            array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
+    }
+    
+    function my_action() {
+        global $wpdb; // this is how you get access to the database
+        
+        $whatever = intval( $_POST['whatever'] );
+        
+        $whatever += 10;
+        
+        echo $whatever;
+        
+        wp_die("hello world!"); // this is required to terminate immediately and return a proper response
     }
 }
 
