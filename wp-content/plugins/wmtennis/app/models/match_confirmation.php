@@ -77,7 +77,7 @@ class MatchConfirmation extends MvcModel {
     
         );
         
-        
+        $matches = $this->find($options);
         if (count($matches) == 1) { 
             $match = $matches[0];
             $data = array(

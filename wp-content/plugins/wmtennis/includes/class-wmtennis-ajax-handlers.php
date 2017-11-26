@@ -26,3 +26,19 @@ function lineup_action() {
     die();
     
 }
+
+function confirm_action() {
+    
+    if(is_user_logged_in()) {
+        $schedule_id = $_POST['schedule_id'];
+        $conf_val = $_POST['confirm_value'];
+        $player_id = get_current_user_id();
+        
+        //echo 'getting wmtennis schedule ' .  $lineup_id;
+        $matchMgr = MvcControllerRegistry::get_controller('match_confirmations_controller');
+        if (isset($matchMgr) && ($matchMgr != false)) {
+            $result = $matchMgr->model->confirm_match($schedule_id, $player_id, $conf_val);
+        }
+    }
+    die();
+}

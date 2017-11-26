@@ -1,4 +1,5 @@
 	jQuery(document).ready(function($) {
+		var current_schedule_id = 0;
 		
 		 $("#bCancel").click(function() {
 		        $(this).parent().parent().parent().hide();
@@ -6,6 +7,32 @@
 
 		 $("#cancel").click(function() {
 		        $(this).parent().parent().hide();
+		    });
+		 
+		 $("#bConfirm").click(function() {
+			 var action = {
+						'action': 'confirm_action',
+						'schedule_id': current_schedule_id,
+						'confirm_value' : 1
+					};
+			 
+			 $.post( ajax_object.ajax_url, action, function(response) {
+				 GetScheduleLineup(current_schedule_id);
+				});	
+			 
+		    });
+		 
+		 $("#bUnavailable").click(function() {
+			 var action = {
+						'action': 'confirm_action',
+						'schedule_id': current_schedule_id,
+						'confirm_value' : -1
+					};
+			 
+			 $.post( ajax_object.ajax_url, action, function(response) {
+				 GetScheduleLineup(current_schedule_id);
+				});	
+			 
 		    });
 		 
 		$('#wmtennis_schedule').DataTable( {
@@ -88,6 +115,7 @@
 		 
 		$('#wmtennis_schedule').on( 'click', 'tr', function () {
 			var id = stable.row( this ).id();
+			current_schedule_id = id;
 			var results = GetScheduleLineup(id);
 			$('#home_team').text($('td:eq(2)', this).html());
 			$('#visit_team').text($('td:eq(3)', this).html());

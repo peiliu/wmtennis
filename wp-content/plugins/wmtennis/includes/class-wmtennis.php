@@ -195,6 +195,10 @@ class Wmtennis {
 	    
 	    add_action( 'wp_ajax_lineup_action', 'lineup_action' );
 	    add_action( 'wp_ajax_nopriv_lineup_action', 'lineup_action' );
+	    
+	    add_action( 'wp_ajax_confirm_action', 'confirm_action' );
+	    add_action( 'wp_ajax_nopriv_confirm_action', 'confirm_action' );
+	    
 	    /*
 	    $scheduleMgr->action = 'index';
 	    $scheduleMgr->init();

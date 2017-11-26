@@ -15,6 +15,8 @@
 </table>
 </div>
 
+
+<?php if(is_user_logged_in()) { ?>
 <div class="popupbg_div">
     <div id="lineup_area">
         <img src="<?php echo WMTENNIS_PLUGIN_URL;?>/assets/win_cancel.png" class="img" id="cancel"/>
@@ -33,8 +35,9 @@
           </thead>
         </table>
         <div id='confirmarea'>
-            <button id="bCconfirm">Confirmed</button>
-            <button id="bCancel">Done</button>
+            <button id="bConfirm">Confirm</button>
+            <button id="bUnavailable">Unavailable</button>
         </div>
     </div>
 </div>
+<?php }?>
