@@ -1,9 +1,52 @@
-        td.details-control {
-            text-align:center;
-            color:forestgreen;
-    cursor: pointer;
+div.popupbg_div { 
+    opacity:0.92; 
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    display: none;
 }
-tr.shown td.details-control {
-    text-align:center; 
-    color:red;
+
+#wmtennis_lineup {   
+    width:100%;
+    height:100%;
+    margin:0px;
+    background-color:white;
+    font-family: 'Fauna One', serif;
+    position: relative;
+    border: 5px solid rgb(90, 158, 181);
+    
+}
+
+.img{
+    float: right;
+    margin-top: -35px;
+    margin-right: -37px;
+}
+
+div.table-container {
+	min-height: 400px;
+	position: relative;
+}
+
+#lineup_area {
+	border-radius:2px;
+    padding:25px 30px 50px 30px;
+    box-shadow:0 0 15px;
+    font-size:14px;
+    font-weight:bold;
+    margin:5% 10% 5% 10%;
+    background-color:white;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+}
+
+#confirmarea  {
+	float:right;
+}
+h3.matchdetails {
+	text-decoration: underline;
 }

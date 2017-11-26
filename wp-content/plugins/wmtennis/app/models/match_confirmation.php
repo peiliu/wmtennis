@@ -7,7 +7,8 @@ class MatchConfirmation extends MvcModel {
     var $belongs_to = array('Schedule');
     var $field_foreign_keys = array(
         'player_id' => 'Roster',
-        'player2_id' => 'Roster'
+        'player2_id' => 'Roster',
+        'schedule_id' => 'Schedule'
     );
     
     public function PositionEnumToString($position) {
@@ -49,8 +50,22 @@ class MatchConfirmation extends MvcModel {
             }
         }
         
+        // set the position
         $object->position = $this->PositionEnumToString($object->position);
         
+        
+  
+    }
+    
+    // get the schedule object based on the schedule ID
+    public function get_match($schedule_id) {
+        $options = array(
+            'conditions' => array(
+                'schedule_id' => $schedule_id                
+            )
+            
+        );
+        return $this->find($options);
     }
     
     public function confirm_match($schedule_id, $player_id, $conf_val) {
@@ -62,7 +77,6 @@ class MatchConfirmation extends MvcModel {
     
         );
         
-        $matches = $this->find($options);
         
         if (count($matches) == 1) { 
             $match = $matches[0];

@@ -11,7 +11,9 @@ Match Address: <?php echo $object->home_team->address1 . ', '. $object->home_tea
 		<th class="column-2"> Time </th> 
 		<th class="column-3"> Player </th> 
 		<th class="column-4"> Player </th>
-		<?php // <th class="column-5">  </th> ?>
+		<?php if (current_user_can('edit_lineup')) { ?> 
+			<th class="column-5">  </th> 
+		<?php } ?>
 	</tr> 
 </thead>
 <tbody>

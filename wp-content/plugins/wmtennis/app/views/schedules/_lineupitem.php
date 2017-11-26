@@ -53,3 +53,8 @@ if ($player2) {
 }
 ?> 
 </td>
+<?php if (current_user_can('edit_lineup')) { ?>
+<td> 
+	<a href="http://wmtennis.com:8000/schedules/lineup/delete/<?php echo $object->id;?>">remove</a>
+</td>
+<?php } ?>

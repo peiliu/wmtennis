@@ -1,7 +1,7 @@
 <?php
 
 //require_once dirname(__FILE__).'/wmtennis_loader.php';
-
+/*
 spl_autoload_register(function ($class_name) {
     //var_dump($class_name);
     if ( !class_exists( $class ) ) {
@@ -10,28 +10,58 @@ spl_autoload_register(function ($class_name) {
         if ( is_file( $class_file ) ) {
             
             require_once $class_file;
+            return;
         }
+        
+        $class_file = WMTENNIS_PLUGIN_PATH . 'app/models/' . $class_name . '.php';
+        
+        if ( is_file( $class_file ) ) {
+            
+            require_once $class_file;
+            return;
+        }
+        
     }
 });
 
+*/    
 
 //    add_action( 'wp_ajax_my_action', array($this, 'my_action') );
 //    add_action( 'wp_ajax_nopriv_my_action', array($this, 'my_action') );
-
    
 class SchedulesController extends MvcPublicController {
     var $tableHelper;
         
     function __construct() {
         parent::__CONSTRUCT();
-        $this->tableHelper = new DataTableHelper('wmtennis-'.$this->model_name);
+        //$this->tableHelper = new DataTableHelper('wmtennis-'.$this->model_name);
         //Add DataTables invocation calls.
         //add_action( 'wp_print_footer_scripts', array( $this, 'add_datatable_calls2' ), 11 ); // after inclusion of files
-        $this->tableHelper->enqueue_datatables();
+        //$this->tableHelper->enqueue_datatables();
         $this->set_rosters();
-        add_action( 'wp_ajax_my_action', array($this, 'my_action') );
-        add_action( 'wp_ajax_nopriv_my_action', array($this, 'my_action') );
+        //add_action( 'wp_ajax_my_action', array($this, 'my_action') );
+        // add_action( 'wp_ajax_nopriv_my_action', array($this, 'my_action') );
+        
+        add_action( 'wp_ajax_schedule_action', array($this, 'get_schedules') );
+        add_action( 'wp_ajax_nopriv_schedule_action', array($this, 'get_schedules') );
+        
+        add_action( 'wp_ajax_home_address_action', array($this, 'get_home_address') );
+        add_action( 'wp_ajax_nopriv_home_address_action', array($this, 'get_home_address') );
+        
+        add_shortcode('wmtennis_schedule', array($this, 'wmtennis_schedule'));
+        //add_action( 'init', array($this, 'loadhook'));
         $this->enqueue_scripts();
+        $this->before = 'before';
+    }
+    
+    public function wmtennis_schedule() {
+        
+        $this->init();
+        //$params = array ( 'controller' => 'schedules', 'action' => 'index');
+        //$response = $this->index();
+        $this->set_objects();
+        $this->render_view($this->views_path.index, $params);
+        
     }
     
     protected function set_rosters() {
@@ -42,7 +72,18 @@ class SchedulesController extends MvcPublicController {
         
     }
     
-    public function lineup() {
+    public function before() {
+        
+    }
+    public function lineup() {   
+        if (!current_user_can('view_lineup')) {
+            
+            echo get_header();
+            echo '<p style="font-size: 2em; color:red">Login to view lineup! </p>';
+            echo get_footer();
+            die();
+        }
+        
         if (!isset($this->form))
         {
             $this->load_helper('Form');
@@ -471,17 +512,34 @@ DOCREADY;
     public function GenerateJson()
     {
         $objects = $this->view_vars['objects'];
-        $jsonData = 'var data = [';
         foreach ($objects as $object) {
+            $result[] = array(
+                'Id' => $object->id,
+                'Date' =>$object->date,
+                'Time' => $object->time, 
+                'Home Team' =>$object->home_team->name, 
+                'Visit Team' => $object->visit_team->name
+            );
+        }
+        //header('Content-type: application/json');
+        $jsonData = json_encode($result);
+        /*
+        $jsonData = '[';
+        //foreach ($objects as $object) {
+        for ($i = 0; $i < count($objects); $i++) {
             $jsonData .= '[';
-            $jsonData .= '"'. $object->date . '"' .  ',';
-            $jsonData .= '"'. $object->home_team->name . '"' .  ',';
-            $jsonData .= '"'. $object->visit_team->name . '"';
+            $jsonData .= '"'. $objects[$i]->date . '"' .  ',';
+            $jsonData .= '"'. $objects[$i]->home_team->name . '"' .  ',';
+            $jsonData .= '"'. $objects[$i]->visit_team->name . '"';
             
-            $jsonData .= '],';
+            if ($i < (count($objects) - 1)) {
+                $jsonData .= '],';
+            }
         }
         $jsonData .= '];';
+        */
         echo $jsonData;
+        die();
     }
     public function BuildConfirmationList() {
         echo <<<CFL
@@ -515,22 +573,37 @@ CFL;
       
     function enqueue_scripts() {
         wp_enqueue_style('dashicons');
-        // wp_enqueue_script( 'ajax-script', WMTENNIS_PLUGIN_URL . 'js/wmtennis_schedules.js', array('jquery'));
+        wp_enqueue_style('wmtennis_style', WMTENNIS_PLUGIN_URL . 'styles/wmtennis.css');
+        //wp_enqueue_style( 'datatables-style', '//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css' );
+        wp_enqueue_script( 'ajax-script', WMTENNIS_PLUGIN_URL . 'js/wmtennis_schedules.js', array('jquery'));
+        wp_enqueue_script( 'wmtennis-datatable', 'https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', array('jquery'));
         // in JavaScript, object properties are accessed as ajax_object.ajax_url, ajax_object.we_value
         wp_localize_script( 'ajax-script', 'ajax_object',
             array( 'ajax_url' => admin_url( 'admin-ajax.php' ), 'we_value' => 1234 ) );
+    }   
+    
+    // get list all schedules in JSON format
+    function get_schedules() {
+        $this->set_objects();
+        $this->GenerateJson();
     }
     
-    function my_action() {
-        global $wpdb; // this is how you get access to the database
+    function get_home_address() {
+        $schedule_id = $_POST['schedule_id'];
+        $options = array(
+            'conditions' => array(
+                'id' => $schedule_id
+            )
+            
+        );
+        $objects = $this->model->find($options);
+        foreach ($objects as $object) {
+            if ($object->id == $schedule_id) {
+                echo $object->home_team->address1 . ', '. $object->home_team->city . ' ' . $object->home_team->state ;
+                die();     
+            }
+        }
         
-        $whatever = intval( $_POST['whatever'] );
-        
-        $whatever += 10;
-        
-        echo $whatever;
-        
-        wp_die("hello world!"); // this is required to terminate immediately and return a proper response
     }
 }
 

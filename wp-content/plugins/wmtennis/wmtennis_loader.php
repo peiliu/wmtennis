@@ -210,6 +210,15 @@ class WmtennisLoader extends MvcPluginLoader {
             $baseRole->add_cap('view_lineup');
             $baseRole->add_cap('confirm_match');
         }
+        
+        $baseRole = get_role('wm_captain');
+        if (isset($baseRole)) {
+            $baseRole->add_cap('view_schedule');
+            $baseRole->add_cap('view_lineup');
+            $baseRole->add_cap('confirm_match');
+            $baseRole->add_cap('edit_schedule');
+            $baseRole->add_cap('edit_lineup');
+        }
     }
     
 }

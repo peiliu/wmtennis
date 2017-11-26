@@ -4,7 +4,7 @@ class Schedule extends MvcModel {
 
     var $display_field = 'name';
     var $includes = array('Team','MatchConfirmation');
-    var $has_many = array('MatchConfirmation');
+    //var $has_many = array('MatchConfirmation');
     var $field_foreign_keys = array(
         'home_team_id' => 'Team',
         'visit_team_id' => 'Team'
